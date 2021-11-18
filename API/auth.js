@@ -14,11 +14,13 @@ router.post("/auth/register", async (req, res) => {
     Password = await bcrypt.hash(Password, 12);
     const UserLogin = await User.findOne({ Email: Email });
     if (UserLogin) {
-      res.json({ message: "This User ID already exist" });
+      return res.json({ message: "This User ID already exist" });
     }
-    const user = new User({ Email, Password });
-    await user.save();
-    res.status(200).send("User Registered Successfully");
+    else {
+      const user = new User({ Email, Password });
+      await user.save();
+      res.status(200).send("User Registered Successfully");
+    }
   } catch (err) {
     console.log(err);
   }
@@ -32,18 +34,18 @@ router.post("/auth/login", async (req, res) => {
     }
     const UserLogin = await User.findOne({ Email: Email });
     if (UserLogin) {
-      const token = jwt.sign(
-        { Email: Email, Password: Password },
-        process.env.SECRET_KEY
-      );
       const isMatch = await bcrypt.compare(Password, UserLogin.Password);
       if (!isMatch) {
-        res.status(400).json({ error: "Invalid Credentials" });
+        return res.status(400).json({ error: "Invalid Credentials" });
       } else {
-        res.status(200).json({ jwttoken: token });
+        const token = jwt.sign(
+          { Email: Email, Password: Password },
+          process.env.SECRET_KEY
+        );
+        return res.status(200).json({ jwttoken: token });
       }
     } else {
-      res.status(400).json({ error: "Invalid Credentials" });
+      return res.status(400).json({ error: "Invalid Credentials" });
     }
   } catch (err) {
     console.log(err);
