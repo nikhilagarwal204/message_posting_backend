@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const User = require("../model/Userschema");
 require("../db/conn");
 
-router.post("/register", async (req, res) => {
+router.post("/auth/register", async (req, res) => {
   let { Email, Password } = req.body;
   if (!Email || !Password) {
     return res.status(400).json({ error: "Please fill all the details" });
@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/signin", async (req, res) => {
+router.post("/auth/login", async (req, res) => {
   try {
     const { Email, Password } = req.body;
     if (!Email || !Password) {

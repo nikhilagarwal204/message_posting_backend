@@ -5,7 +5,7 @@ const User = require("../model/Userschema");
 const Message = require("../model/Message");
 require("../db/conn");
 
-router.post("/postmessage", async (req, res) => {
+router.post("/messages", async (req, res) => {
   const token = req.headers["x-access-token"];
   try {
     const { message } = req.body;
@@ -33,7 +33,7 @@ router.post("/postmessage", async (req, res) => {
   }
 });
 
-router.route("/read").get((req, res) => {
+router.get("/messages", (req, res) => {
   const page = req.query.page;
   const limit = req.query.limit;
   const startindex = (page - 1) * limit;
@@ -53,7 +53,7 @@ router.route("/read").get((req, res) => {
   }
 });
 
-router.put("/edit/:id", async (req, res) => {
+router.put("/messages/:id", async (req, res) => {
   const token = req.headers["x-access-token"];
   const { id } = req.params;
   const { message } = req.body;
@@ -85,7 +85,7 @@ router.put("/edit/:id", async (req, res) => {
   }
 });
 
-router.route("/deletepost/:id").delete(async (req, res) => {
+router.delete("/messages/:id", async (req, res) => {
   const token = req.headers["x-access-token"];
   const { id } = req.params;
   try {
